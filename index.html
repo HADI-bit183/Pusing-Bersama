@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kalkulator SPL Eliminasi Gauss - Multi Navigasi</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Fira+Mono&display=swap");
+      body {
+        font-family: "Fira Mono", monospace;
+        background: #f0f4f8;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      header {
+        background-color: #2563eb;
+        color: white;
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 600;
+        font-size: 1.2rem;
+      }
+      nav button {
+        background: none;
+        border: none;
+        color: white;
+        font-family: "Fira Mono", monospace;
+        font-size: 1.1rem;
+        margin-left: 1.5rem;
+        cursor: pointer;
+        padding: 0.25rem 0.5rem;
+        border-radius: 6px;
+        transition: background-color 0.3s;
+      }
+      nav button:hover {
+        background-color: rgba(255 255 255 / 0.2);
+      }
+      nav button.active {
+        background-color: rgba(255 255 255 / 0.4);
+        font-weight: 700;
+      }
+      main {
+        flex-grow: 1;
+        padding: 2rem 2.5rem;
+        max-width: 900px;
+        margin: 0 auto;
+        box-sizing: border-box;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgb(0 0 0 / 0.1);
+        margin-top: 1rem;
+        margin-bottom: 2rem;
+        min-height: 70vh;
+        color: #475569;
+      }
+      h1 {
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 1rem;
+      }
+      /* Section kelompok */
+      .group-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2563eb;
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+      .members-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 2rem;
+      }
+      .member-card {
+        background: #f1f5f9;
+        padding: 1rem;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+      }
+      .member-photo {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 0.6rem;
+        border: 3px solid #2563eb;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .member-name {
+        font-weight: 700;
+        font-size: 1rem;
+        margin-bottom: 0.3rem;
+        color: #1e293b;
+      }
+      .member-npm {
+        font-size: 0.85rem;
+        color: #64748b;
+        font-family: monospace;
+      }
+
+      /* Kalkulator styles */
+      #equationsInput {
+        width: 100%;
+        height: 140px;
+        font-family: "Fira Mono", monospace;
+        font-size: 1rem;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        border: 1.8px solid #cbd5e1;
+        resize: vertical;
+        box-sizing: border-box;
+        outline-offset: 2px;
+        transition: border-color 0.3s;
+        color: #334155;
+      }
+      #equationsInput:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 8px rgb(59 130 246 / 0.4);
+      }
+      button#solveBtn {
+        margin-top: 1.25rem;
+        background-color: #2563eb;
+        color: white;
+        border: none;
+        padding: 0.65rem 1.5rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.25s ease;
+      }
+      button#solveBtn:hover:not(:disabled) {
+        background-color: #1e40af;
+      }
+      button#solveBtn:disabled {
+        background-color: #a5b4fc;
+        cursor: not-allowed;
+      }
+      #output {
+        margin-top: 1.5rem;
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 1rem 1.5rem;
+        font-family: "Fira Mono", monospace;
+        white-space: pre-wrap;
+        max-height: 600px;
+        overflow-y: auto;
+        color: #334155;
+        min-height: 300px;
+      }
+      .error {
+        color: #b91c1c;
+        font-weight: 700;
+        margin-top: 1rem;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>Kalkulator SPL Gauss</div>
+      <nav>
+        <button id="navHome" class="active" aria-current="page">Home</button>
+        <button id="navExplain">Penjelasan</button>
+        <button id="navCalculator">Kalkulator</button>
+      </nav>
+    </header>
+
+    <main>
+      <!-- Home page -->
+      <section id="pageHome">
+        <h1 class="group-name">Kelompok Pusing Bersama</h1>
+        <div class="members-grid">
+          <div class="member-card">
+            <img src="Hadi.jpg" alt="Foto Hadi Priono" class="member-photo" />
+            <div class="member-name">Hadi Priono</div>
+            <div class="member-npm">24312025</div>
+          </div>
+          <div class="member-card">
+            <img src="Reno.jpg" alt="Foto Reno" class="member-photo" />
+            <div class="member-name">Reno</div>
+            <div class="member-npm">24312045</div>
+          </div>
+          <div class="member-card">
+            <img src="Lulu.jpg" alt="Foto Lulu Zakia" class="member-photo" />
+            <div class="member-name">Lulu Zakia</div>
+            <div class="member-npm">24312028</div>
+          </div>
+          <div class="member-card">
+            <img
+              src="Bunga.jpg"
+              alt="Foto Bunga Lestari"
+              class="member-photo"
+            />
+            <div class="member-name">Bunga Lestari</div>
+            <div class="member-npm">24312010</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Explanation page -->
+      <section id="pageExplain" style="display: none">
+        <h1>Selamat Datang di Kalkulator SPL Eliminasi Gauss</h1>
+        <p>
+          Kalkulator ini membantu Anda menyelesaikan sistem persamaan linear
+          (SPL) menggunakan metode Eliminasi Gauss secara langkah demi langkah.
+          Anda dapat memasukkan persamaan linear dengan variabel bebas (misalnya
+          x, y, z), dan kalkulator akan menampilkan proses eliminasi untuk
+          mendapatkan solusi secara tepat.
+        </p>
+        <p>
+          Metode Eliminasi Gauss adalah cara sistematis untuk menyelesaikan
+          sistem persamaan linear dengan mengubahnya menjadi bentuk matriks
+          segitiga atas (upper triangular matrix). Metode ini sangat penting
+          dalam aljabar linear dan berbagai aplikasi matematika terapan serta
+          rekayasa.
+        </p>
+        <p>
+          Berikut adalah langkah-langkah utama dalam metode Eliminasi Gauss:
+        </p>
+        <ol>
+          <li>
+            Pilih elemen pivot di setiap kolom (biasanya diagonal utama) yang
+            tidak nol.
+          </li>
+          <li>
+            Jika elemen pivot bernilai nol, lakukan pertukaran baris untuk
+            mendapatkan pivot bukan nol.
+          </li>
+          <li>
+            Bagi baris pivot sehingga elemen pivot menjadi 1 (normalisasi
+            pivot).
+          </li>
+          <li>
+            Eliminasi elemen-elemen di bawah pivot dengan mengurangkan kelipatan
+            baris pivot dari baris lain sehingga membentuk matriks segitiga
+            atas.
+          </li>
+          <li>
+            Setelah matriks berbentuk segitiga atas, lakukan substitusi balik
+            untuk mencari nilai variabel secara bertahap.
+          </li>
+        </ol>
+        <p>
+          Kalkulator ini menampilkan proses eliminasi secara lengkap dan langkah
+          demi langkah, termasuk matriks awal, operasi baris yang dilakukan,
+          serta hasil akhir solusi. Dengan demikian, pengguna dapat memahami
+          bagaimana solusi sistem persamaan linear diperoleh secara transparan
+          dan akurat.
+        </p>
+      </section>
+
+      <!-- Calculator page -->
+      <section id="pageCalculator" style="display: none">
+        <h1>Masukkan Sistem Persamaan Linear Anda</h1>
+        <label for="equationsInput">Contoh format:</label>
+        <textarea
+          id="equationsInput"
+          aria-describedby="exampleDesc"
+          spellcheck="false"
+          autofocus
+        >
+x + y + 2z = 9
+2x + y - 3z = 1
+3x + 6y - 5z = 0
+</textarea
+        >
+        <div
+          id="exampleDesc"
+          style="
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+            margin-bottom: 0.7rem;
+          "
+        >
+          Gunakan variabel bebas dan tanda sama dengan (=), tiap persamaan
+          dipisah baris baru.
+        </div>
+        <button id="solveBtn">Selesaikan dengan Gauss</button>
+        <pre id="output" aria-live="polite" aria-atomic="true"></pre>
+        <div
+          id="errorMsg"
+          class="error"
+          role="alert"
+          aria-live="assertive"
+        ></div>
+      </section>
+    </main>
+
+    <script>
+      // Navigasi antar halaman
+      const navHome = document.getElementById("navHome");
+      const navExplain = document.getElementById("navExplain");
+      const navCalculator = document.getElementById("navCalculator");
+      const pageHome = document.getElementById("pageHome");
+      const pageExplain = document.getElementById("pageExplain");
+      const pageCalculator = document.getElementById("pageCalculator");
+
+      function setActiveButton(activeBtn) {
+        [navHome, navExplain, navCalculator].forEach((btn) =>
+          btn.classList.remove("active")
+        );
+        activeBtn.classList.add("active");
+        activeBtn.setAttribute("aria-current", "page");
+        [navHome, navExplain, navCalculator]
+          .filter((b) => b !== activeBtn)
+          .forEach((b) => b.removeAttribute("aria-current"));
+      }
+
+      navHome.addEventListener("click", () => {
+        pageHome.style.display = "block";
+        pageExplain.style.display = "none";
+        pageCalculator.style.display = "none";
+        setActiveButton(navHome);
+      });
+
+      navExplain.addEventListener("click", () => {
+        pageHome.style.display = "none";
+        pageExplain.style.display = "block";
+        pageCalculator.style.display = "none";
+        setActiveButton(navExplain);
+      });
+
+      navCalculator.addEventListener("click", () => {
+        pageHome.style.display = "none";
+        pageExplain.style.display = "none";
+        pageCalculator.style.display = "block";
+        setActiveButton(navCalculator);
+        document.getElementById("equationsInput").focus();
+      });
+
+      navHome.click(); // Tampilkan Home default saat halaman dimuat
+
+      // Fungsi untuk format angka
+      function formatNumber(num) {
+        if (Number.isInteger(num)) return num.toString();
+        return parseFloat(num.toFixed(6)).toString();
+      }
+
+      // Format matriks untuk output biasa
+      function formatMatrixPlain(matrix) {
+        const cols = matrix[0].length - 1;
+        return matrix
+          .map((row) => {
+            const left = row
+              .slice(0, cols)
+              .map((v) => formatNumber(v).padStart(7))
+              .join(" ");
+            const right = formatNumber(row[cols]).padStart(7);
+            return `[${left}  |${right} ]`;
+          })
+          .join("\n");
+      }
+
+      // Format matriks dengan operasi yang sedang terjadi
+      function formatMatrixWithOps(matrix, affectedRows = [], operations = []) {
+        const cols = matrix[0].length - 1;
+        return matrix
+          .map((row, idx) => {
+            const left = row
+              .slice(0, cols)
+              .map((v) => formatNumber(v).padStart(7))
+              .join(" ");
+            const right = formatNumber(row[cols]).padStart(7);
+            const op = affectedRows.includes(idx)
+              ? "     " + operations[affectedRows.indexOf(idx)]
+              : "";
+            return `[${left}  |${right} ]${op}`;
+          })
+          .join("\n");
+      }
+
+      // Parsing input persamaan menjadi matriks augmented
+      function parseEquations(input) {
+        const lines = input
+          .trim()
+          .split("\n")
+          .filter((l) => l.trim());
+        if (lines.length === 0)
+          throw new Error("Input persamaan tidak boleh kosong.");
+
+        const variableSet = new Set();
+        const varRegex = /([a-zA-Z])/g;
+
+        for (const line of lines) {
+          const parts = line.split("=");
+          if (parts.length !== 2)
+            throw new Error(
+              `Format salah di baris: "${line}" (harus ada satu tanda "=")`
+            );
+          const left = parts[0];
+          let varsInLine = left.match(varRegex);
+          if (!varsInLine || varsInLine.length === 0)
+            throw new Error(`Tidak ditemukan variabel di baris: "${line}"`);
+          varsInLine.forEach((v) => variableSet.add(v));
+        }
+
+        const variables = Array.from(variableSet).sort();
+
+        const matrix = [];
+        const termRegex = /([+-]?(\d+(\.\d+)?|\.\d+)?)([a-zA-Z])/g;
+
+        for (const line of lines) {
+          const [leftRaw, rightRaw] = line.split("=");
+          const left = leftRaw.trim();
+          const right = rightRaw.trim();
+
+          const row = new Array(variables.length + 1).fill(0);
+
+          let match;
+          while ((match = termRegex.exec(left)) !== null) {
+            let coeffStr = match[1];
+            const variable = match[4];
+
+            if (coeffStr === "+" || coeffStr === "" || coeffStr === undefined)
+              coeffStr = "1";
+            else if (coeffStr === "-") coeffStr = "-1";
+
+            const coeff = parseFloat(coeffStr);
+            const idx = variables.indexOf(variable);
+            if (idx === -1)
+              throw new Error(
+                `Variabel "${variable}" tidak dikenali di baris: "${line}"`
+              );
+            row[idx] += coeff;
+          }
+
+          const rhs = parseFloat(right);
+          if (isNaN(rhs))
+            throw new Error(
+              `Nilai di sebelah kanan "=" bukan angka valid di baris: "${line}"`
+            );
+          row[variables.length] = rhs;
+
+          matrix.push(row);
+        }
+
+        return { matrix, variables };
+      }
+
+      let steps = [];
+      let mat = [];
+
+      function pushStep(desc, affectedRows = [], operations = []) {
+        steps.push({ desc, mat: cloneMatrix(mat), affectedRows, operations });
+      }
+
+      function cloneMatrix(matrix) {
+        return matrix.map((row) => [...row]);
+      }
+
+      function gaussElimination(matrix, variables) {
+        const n = matrix.length;
+        const m = variables.length;
+        mat = cloneMatrix(matrix);
+        steps = [];
+
+        const initialMat = cloneMatrix(mat);
+
+        for (let i = 0; i < Math.min(n, m); i++) {
+          if (mat[i][i] === 0) {
+            let swapRow = -1;
+            for (let r = i + 1; r < n; r++) {
+              if (mat[r][i] !== 0) {
+                swapRow = r;
+                break;
+              }
+            }
+            if (swapRow !== -1) {
+              [mat[i], mat[swapRow]] = [mat[swapRow], mat[i]];
+              pushStep(
+                "",
+                [i, swapRow],
+                [
+                  `tukar b${i + 1} dan b${swapRow + 1}`,
+                  `tukar b${swapRow + 1} dan b${i + 1}`,
+                ]
+              );
+            }
+          }
+
+          if (mat[i][i] === 0) continue;
+
+          const pivot = mat[i][i];
+          if (pivot !== 1) {
+            for (let col = i; col <= m; col++) {
+              mat[i][col] /= pivot;
+            }
+            pushStep("", [i], [`${formatNumber(pivot)} b${i + 1}`]);
+          }
+
+          for (let r = i + 1; r < n; r++) {
+            const factor = mat[r][i];
+            if (factor === 0) continue;
+            for (let col = i; col <= m; col++) {
+              mat[r][col] -= factor * mat[i][col];
+            }
+            pushStep(
+              "",
+              [r],
+              [`-${formatNumber(factor)}.b${i + 1} + b${r + 1}`]
+            );
+          }
+        }
+
+        let solution = new Array(m).fill(null);
+        let inconsistent = false;
+
+        for (let r = 0; r < n; r++) {
+          let allZero = true;
+          for (let c = 0; c < m; c++) {
+            if (Math.abs(mat[r][c]) > 1e-10) {
+              allZero = false;
+              break;
+            }
+          }
+          if (allZero && Math.abs(mat[r][m]) > 1e-10) {
+            inconsistent = true;
+            break;
+          }
+        }
+
+        if (inconsistent) {
+          steps.push({ desc: "", mat: null, affectedRows: [], operations: [] });
+          return { steps, solution: null, initialMat };
+        }
+
+        for (let i = m - 1; i >= 0; i--) {
+          let pivotRow = -1;
+          for (let r = 0; r < n; r++) {
+            if (Math.abs(mat[r][i] - 1) < 1e-10) {
+              pivotRow = r;
+              break;
+            }
+          }
+          if (pivotRow === -1) {
+            solution[i] = "bebas";
+            continue;
+          }
+
+          let val = mat[pivotRow][m];
+          for (let c = i + 1; c < m; c++) {
+            if (solution[c] !== "bebas" && solution[c] !== null) {
+              val -= mat[pivotRow][c] * solution[c];
+            }
+          }
+          solution[i] = val;
+        }
+
+        const freeVars = solution.filter((v) => v === "bebas").length;
+
+        return { steps, solution, freeVars, initialMat };
+      }
+
+      function renderOutput(steps, solution, variables, freeVars, initialMat) {
+        let out = "";
+
+        // Tampilkan matriks awal dulu tanpa operasi
+        out += formatMatrixPlain(initialMat) + "\n\n";
+
+        // Tampilkan langkah-langkah
+        steps.forEach((step) => {
+          if (step.mat) {
+            out +=
+              formatMatrixWithOps(
+                step.mat,
+                step.affectedRows,
+                step.operations
+              ) + "\n\n";
+          }
+        });
+
+        if (solution === null) {
+          out += "Sistem persamaan tidak memiliki solusi.\n";
+          return out;
+        }
+
+        if (freeVars > 0) {
+          out += `Sistem memiliki solusi tak hingga karena terdapat ${freeVars} variabel bebas.\n`;
+          out += "Solusi (variabel bebas ditandai sebagai bebas):\n";
+        } else {
+          out += "Solusi unik ditemukan:\n";
+        }
+
+        variables.forEach((v, i) => {
+          const val = solution[i];
+          if (val === "bebas") {
+            out += `${v} = bebas\n`;
+          } else {
+            out += `${v} = ${formatNumber(val)}\n`;
+          }
+        });
+
+        return out;
+      }
+
+      // Event listener tombol Selesaikan
+      document.getElementById("solveBtn").addEventListener("click", () => {
+        const outputEl = document.getElementById("output");
+        const errorEl = document.getElementById("errorMsg");
+        outputEl.textContent = "";
+        errorEl.textContent = "";
+        const input = document.getElementById("equationsInput").value;
+        try {
+          const { matrix, variables } = parseEquations(input);
+          if (matrix.length === 0)
+            throw new Error("Tidak ada persamaan ditemukan.");
+          if (variables.length === 0)
+            throw new Error("Tidak ada variabel ditemukan.");
+          const { steps, solution, freeVars, initialMat } = gaussElimination(
+            matrix,
+            variables
+          );
+          outputEl.textContent = renderOutput(
+            steps,
+            solution,
+            variables,
+            freeVars,
+            initialMat
+          );
+        } catch (e) {
+          errorEl.textContent = `Error: ${e.message}`;
+        }
+      });
+    </script>
+  </body>
+</html>
