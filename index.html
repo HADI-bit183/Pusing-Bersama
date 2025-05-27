@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Kalkulator SPL Eliminasi Gauss - Multi Navigasi</title>
+    <title>Kalkulator SPL Eliminasi Gauss & Statistika - Multi Navigasi</title>
+
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Fira+Mono&display=swap");
       body {
@@ -106,7 +107,7 @@
         font-family: monospace;
       }
 
-      /* Kalkulator styles */
+      /* Kalkulator SPL */
       #equationsInput {
         width: 100%;
         height: 140px;
@@ -144,7 +145,7 @@
         background-color: #a5b4fc;
         cursor: not-allowed;
       }
-      #output {
+      #outputSPL {
         margin-top: 1.5rem;
         background-color: #f8fafc;
         border: 1px solid #e2e8f0;
@@ -157,28 +158,75 @@
         color: #334155;
         min-height: 300px;
       }
-      .error {
+      #errorMsgSPL {
         color: #b91c1c;
         font-weight: 700;
         margin-top: 1rem;
         text-align: center;
       }
+
+      /* Statistik */
+      #pageStatistika table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        font-size: 14px;
+      }
+      #pageStatistika th,
+      #pageStatistika td {
+        border: 1px solid #000;
+        padding: 6px;
+        text-align: center;
+      }
+      #pageStatistika input[type="number"],
+      #pageStatistika input[type="text"] {
+        width: 80px;
+        text-align: center;
+      }
+      #pageStatistika .result,
+      #pageStatistika .steps {
+        background: #fff;
+        border: 1px solid #ccc;
+        padding: 15px;
+        margin-top: 20px;
+      }
+      #pageStatistika .steps h3 {
+        color: darkblue;
+        margin-top: 0;
+      }
+      #pageStatistika .formula {
+        font-size: 1.1em;
+        margin: 8px 0;
+      }
+      /* Baris total tabel statistik */
+      #pageStatistika tbody tr.total-row {
+        font-weight: 700;
+        background-color: #e2e8f0;
+      }
     </style>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
   </head>
   <body>
     <header>
-      <div>Kalkulator SPL Gauss</div>
+      <div>Kalkulator SPL Gauss & Statistika</div>
       <nav>
         <button id="navHome" class="active" aria-current="page">Home</button>
         <button id="navExplain">Penjelasan</button>
         <button id="navCalculator">Kalkulator</button>
+        <button id="navStatistika">Statistika</button>
       </nav>
     </header>
 
     <main>
-      <!-- Home page -->
+      <!-- Home -->
       <section id="pageHome">
-        <h1 class="group-name">Kelompok Pusing Bersama</h1>
+        <h1 class="group-name">Kelompok Matematika A1</h1>
         <div class="members-grid">
           <div class="member-card">
             <img src="Hadi.jpg" alt="Foto Hadi Priono" class="member-photo" />
@@ -186,18 +234,26 @@
             <div class="member-npm">24312025</div>
           </div>
           <div class="member-card">
-            <img src="Reno.jpg" alt="Foto Reno" class="member-photo" />
+            <img
+              src="https://i.pravatar.cc/100?img=25"
+              alt="Foto Reno"
+              class="member-photo"
+            />
             <div class="member-name">Reno</div>
             <div class="member-npm">24312045</div>
           </div>
           <div class="member-card">
-            <img src="Lulu.jpg" alt="Foto Lulu Zakia" class="member-photo" />
+            <img
+              src="https://i.pravatar.cc/100?img=30"
+              alt="Foto Lulu Zakia"
+              class="member-photo"
+            />
             <div class="member-name">Lulu Zakia</div>
             <div class="member-npm">24312028</div>
           </div>
           <div class="member-card">
             <img
-              src="Bunga.jpg"
+              src="https://i.pravatar.cc/100?img=42"
               alt="Foto Bunga Lestari"
               class="member-photo"
             />
@@ -207,7 +263,7 @@
         </div>
       </section>
 
-      <!-- Explanation page -->
+      <!-- Penjelasan -->
       <section id="pageExplain" style="display: none">
         <h1>Selamat Datang di Kalkulator SPL Eliminasi Gauss</h1>
         <p>
@@ -259,7 +315,7 @@
         </p>
       </section>
 
-      <!-- Calculator page -->
+      <!-- Kalkulator SPL -->
       <section id="pageCalculator" style="display: none">
         <h1>Masukkan Sistem Persamaan Linear Anda</h1>
         <label for="equationsInput">Contoh format:</label>
@@ -287,13 +343,59 @@ x + y + 2z = 9
           dipisah baris baru.
         </div>
         <button id="solveBtn">Selesaikan dengan Gauss</button>
-        <pre id="output" aria-live="polite" aria-atomic="true"></pre>
-        <div
-          id="errorMsg"
-          class="error"
-          role="alert"
-          aria-live="assertive"
-        ></div>
+        <pre id="outputSPL" aria-live="polite" aria-atomic="true"></pre>
+        <div id="errorMsgSPL" role="alert" aria-live="assertive"></div>
+      </section>
+
+      <!-- Statistika -->
+      <section id="pageStatistika" style="display: none">
+        <h2>Kalkulator Ukuran Pemusatan Data - Kuartil Konsisten</h2>
+        <p>
+          Kuartil 1, 2, dan 3 dihitung dengan rumus yang sama, hanya beda nilai
+          i.
+        </p>
+
+        <table id="input-table">
+          <thead>
+            <tr>
+              <th>Kelas</th>
+              <th>Frekuensi (fi)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="text" value="30-39" /></td>
+              <td><input type="number" value="3" /></td>
+            </tr>
+            <tr>
+              <td><input type="text" value="40-49" /></td>
+              <td><input type="number" value="5" /></td>
+            </tr>
+            <tr>
+              <td><input type="text" value="50-59" /></td>
+              <td><input type="number" value="10" /></td>
+            </tr>
+            <tr>
+              <td><input type="text" value="60-69" /></td>
+              <td><input type="number" value="13" /></td>
+            </tr>
+            <tr>
+              <td><input type="text" value="70-79" /></td>
+              <td><input type="number" value="25" /></td>
+            </tr>
+            <tr>
+              <td><input type="text" value="80-89" /></td>
+              <td><input type="number" value="12" /></td>
+            </tr>
+            <tr>
+              <td><input type="text" value="90-99" /></td>
+              <td><input type="number" value="20" /></td>
+            </tr>
+          </tbody>
+        </table>
+        <button id="btnHitungStat">Hitung</button>
+        <div id="outputStat" class="result"></div>
+        <div id="stepsStat" class="steps"></div>
       </section>
     </main>
 
@@ -302,85 +404,63 @@ x + y + 2z = 9
       const navHome = document.getElementById("navHome");
       const navExplain = document.getElementById("navExplain");
       const navCalculator = document.getElementById("navCalculator");
+      const navStatistika = document.getElementById("navStatistika");
+
       const pageHome = document.getElementById("pageHome");
       const pageExplain = document.getElementById("pageExplain");
       const pageCalculator = document.getElementById("pageCalculator");
+      const pageStatistika = document.getElementById("pageStatistika");
 
       function setActiveButton(activeBtn) {
-        [navHome, navExplain, navCalculator].forEach((btn) =>
+        [navHome, navExplain, navCalculator, navStatistika].forEach((btn) =>
           btn.classList.remove("active")
         );
         activeBtn.classList.add("active");
         activeBtn.setAttribute("aria-current", "page");
-        [navHome, navExplain, navCalculator]
+        [navHome, navExplain, navCalculator, navStatistika]
           .filter((b) => b !== activeBtn)
           .forEach((b) => b.removeAttribute("aria-current"));
       }
 
-      navHome.addEventListener("click", () => {
-        pageHome.style.display = "block";
+      function showPage(pageToShow) {
+        pageHome.style.display = "none";
         pageExplain.style.display = "none";
         pageCalculator.style.display = "none";
+        pageStatistika.style.display = "none";
+
+        pageToShow.style.display = "block";
+
+        if (pageToShow === pageStatistika && window.MathJax) {
+          MathJax.typesetPromise();
+        }
+      }
+
+      navHome.addEventListener("click", () => {
+        showPage(pageHome);
         setActiveButton(navHome);
       });
-
       navExplain.addEventListener("click", () => {
-        pageHome.style.display = "none";
-        pageExplain.style.display = "block";
-        pageCalculator.style.display = "none";
+        showPage(pageExplain);
         setActiveButton(navExplain);
       });
-
       navCalculator.addEventListener("click", () => {
-        pageHome.style.display = "none";
-        pageExplain.style.display = "none";
-        pageCalculator.style.display = "block";
+        showPage(pageCalculator);
         setActiveButton(navCalculator);
         document.getElementById("equationsInput").focus();
       });
+      navStatistika.addEventListener("click", () => {
+        showPage(pageStatistika);
+        setActiveButton(navStatistika);
+      });
 
-      navHome.click(); // Tampilkan Home default saat halaman dimuat
+      navHome.click();
 
-      // Fungsi untuk format angka
+      // ==== Kalkulator SPL ====
       function formatNumber(num) {
         if (Number.isInteger(num)) return num.toString();
         return parseFloat(num.toFixed(6)).toString();
       }
 
-      // Format matriks untuk output biasa
-      function formatMatrixPlain(matrix) {
-        const cols = matrix[0].length - 1;
-        return matrix
-          .map((row) => {
-            const left = row
-              .slice(0, cols)
-              .map((v) => formatNumber(v).padStart(7))
-              .join(" ");
-            const right = formatNumber(row[cols]).padStart(7);
-            return `[${left}  |${right} ]`;
-          })
-          .join("\n");
-      }
-
-      // Format matriks dengan operasi yang sedang terjadi
-      function formatMatrixWithOps(matrix, affectedRows = [], operations = []) {
-        const cols = matrix[0].length - 1;
-        return matrix
-          .map((row, idx) => {
-            const left = row
-              .slice(0, cols)
-              .map((v) => formatNumber(v).padStart(7))
-              .join(" ");
-            const right = formatNumber(row[cols]).padStart(7);
-            const op = affectedRows.includes(idx)
-              ? "     " + operations[affectedRows.indexOf(idx)]
-              : "";
-            return `[${left}  |${right} ]${op}`;
-          })
-          .join("\n");
-      }
-
-      // Parsing input persamaan menjadi matriks augmented
       function parseEquations(input) {
         const lines = input
           .trim()
@@ -444,15 +524,7 @@ x + y + 2z = 9
 
           matrix.push(row);
         }
-
         return { matrix, variables };
-      }
-
-      let steps = [];
-      let mat = [];
-
-      function pushStep(desc, affectedRows = [], operations = []) {
-        steps.push({ desc, mat: cloneMatrix(mat), affectedRows, operations });
       }
 
       function cloneMatrix(matrix) {
@@ -462,10 +534,12 @@ x + y + 2z = 9
       function gaussElimination(matrix, variables) {
         const n = matrix.length;
         const m = variables.length;
-        mat = cloneMatrix(matrix);
-        steps = [];
+        let mat = cloneMatrix(matrix);
+        let steps = [];
 
-        const initialMat = cloneMatrix(mat);
+        function pushStep(desc, affectedRows = [], operations = []) {
+          steps.push({ desc, mat: cloneMatrix(mat), affectedRows, operations });
+        }
 
         for (let i = 0; i < Math.min(n, m); i++) {
           if (mat[i][i] === 0) {
@@ -532,7 +606,7 @@ x + y + 2z = 9
 
         if (inconsistent) {
           steps.push({ desc: "", mat: null, affectedRows: [], operations: [] });
-          return { steps, solution: null, initialMat };
+          return { steps, solution: null, initialMat: matrix };
         }
 
         for (let i = m - 1; i >= 0; i--) {
@@ -559,16 +633,47 @@ x + y + 2z = 9
 
         const freeVars = solution.filter((v) => v === "bebas").length;
 
-        return { steps, solution, freeVars, initialMat };
+        return { steps, solution, freeVars, initialMat: matrix };
+      }
+
+      function formatMatrixPlain(matrix) {
+        if (!matrix) return "";
+        const cols = matrix[0].length - 1;
+        return matrix
+          .map((row) => {
+            const left = row
+              .slice(0, cols)
+              .map((v) => formatNumber(v).padStart(7))
+              .join(" ");
+            const right = formatNumber(row[cols]).padStart(7);
+            return `[${left}  |${right} ]`;
+          })
+          .join("\n");
+      }
+
+      function formatMatrixWithOps(matrix, affectedRows = [], operations = []) {
+        if (!matrix) return "";
+        const cols = matrix[0].length - 1;
+        return matrix
+          .map((row, idx) => {
+            const left = row
+              .slice(0, cols)
+              .map((v) => formatNumber(v).padStart(7))
+              .join(" ");
+            const right = formatNumber(row[cols]).padStart(7);
+            const op = affectedRows.includes(idx)
+              ? "     " + operations[affectedRows.indexOf(idx)]
+              : "";
+            return `[${left}  |${right} ]${op}`;
+          })
+          .join("\n");
       }
 
       function renderOutput(steps, solution, variables, freeVars, initialMat) {
         let out = "";
 
-        // Tampilkan matriks awal dulu tanpa operasi
         out += formatMatrixPlain(initialMat) + "\n\n";
 
-        // Tampilkan langkah-langkah
         steps.forEach((step) => {
           if (step.mat) {
             out +=
@@ -604,10 +709,9 @@ x + y + 2z = 9
         return out;
       }
 
-      // Event listener tombol Selesaikan
       document.getElementById("solveBtn").addEventListener("click", () => {
-        const outputEl = document.getElementById("output");
-        const errorEl = document.getElementById("errorMsg");
+        const outputEl = document.getElementById("outputSPL");
+        const errorEl = document.getElementById("errorMsgSPL");
         outputEl.textContent = "";
         errorEl.textContent = "";
         const input = document.getElementById("equationsInput").value;
@@ -630,6 +734,165 @@ x + y + 2z = 9
           );
         } catch (e) {
           errorEl.textContent = `Error: ${e.message}`;
+        }
+      });
+
+      // ==== Kalkulator Statistika ====
+
+      document.getElementById("btnHitungStat").addEventListener("click", () => {
+        const rows = document.querySelectorAll("#input-table tbody tr");
+        let data = [],
+          totalFi = 0,
+          totalFixi = 0;
+
+        rows.forEach((row) => {
+          const kelas = row.cells[0].children[0].value.trim();
+          const fi = parseInt(row.cells[1].children[0].value);
+          const [bawah, atas] = kelas.split("-").map(Number);
+          const xi = (bawah + atas) / 2;
+          const fixi = xi * fi;
+          totalFi += fi;
+          totalFixi += fixi;
+          data.push({ kelas, fi, xi, fixi, bawah, atas });
+        });
+
+        const mean = totalFixi / totalFi;
+
+        data.forEach((d) => {
+          d.xiMinusMean = d.xi - mean;
+          d.xiMinusMeanSq = Math.pow(d.xiMinusMean, 2);
+          d.xiMinusMeanSqFi = d.xiMinusMeanSq * d.fi;
+        });
+
+        const sumXiMinusMeanSqFi = data.reduce(
+          (acc, d) => acc + d.xiMinusMeanSqFi,
+          0
+        );
+        const SD = Math.sqrt(sumXiMinusMeanSqFi / (totalFi - 1));
+
+        // Median
+        let N = totalFi;
+        let Lmed, fmed, Fmed, median;
+        let cumulative = 0;
+        for (let i = 0; i < data.length; i++) {
+          cumulative += data[i].fi;
+          if (cumulative >= N / 2) {
+            Lmed = data[i].bawah - 0.5;
+            fmed = data[i].fi;
+            Fmed = cumulative - fmed;
+            median = Lmed + ((N / 2 - Fmed) / fmed) * 10;
+            break;
+          }
+        }
+
+        // Modus
+        let maxIdx = 0;
+        data.forEach((d, i) => {
+          if (d.fi > data[maxIdx].fi) maxIdx = i;
+        });
+        const f1 = data[maxIdx].fi;
+        const f0 = maxIdx > 0 ? data[maxIdx - 1].fi : 0;
+        const f2 = maxIdx < data.length - 1 ? data[maxIdx + 1].fi : 0;
+        const Lmod = data[maxIdx].bawah - 0.5;
+        const modus = Lmod + ((f1 - f0) / (f1 - f0 + (f1 - f2))) * 10;
+
+        cumulative = 0;
+        let Lq = [],
+          fq = [],
+          Fq = [],
+          Qval = [];
+        for (let i = 1; i <= 3; i++) {
+          cumulative = 0;
+          for (let j = 0; j < data.length; j++) {
+            cumulative += data[j].fi;
+            if (cumulative >= (i * N) / 4) {
+              Lq[i] = data[j].bawah - 0.5;
+              fq[i] = data[j].fi;
+              Fq[i] = cumulative - fq[i];
+              Qval[i] = Lq[i] + (((i * N) / 4 - Fq[i]) / fq[i]) * 10;
+              break;
+            }
+          }
+        }
+
+        let range = data[data.length - 1].atas - data[0].bawah;
+
+        // Hitung total untuk tabel
+        let totalFiFixi = 0;
+        let totalXiMinusMeanSqFi = 0;
+
+        data.forEach((d) => {
+          totalFiFixi += d.fixi;
+          totalXiMinusMeanSqFi += d.xiMinusMeanSqFi;
+        });
+
+        let tableHTML = `<table><thead><tr>
+  <th>Kelas</th><th>fi</th><th>xi</th><th>fi·xi</th><th>xi - x̄</th>
+  <th>(xi - x̄)²</th><th>(xi - x̄)²·fi</th>
+  </tr></thead><tbody>`;
+
+        data.forEach((d) => {
+          tableHTML += `<tr>
+    <td>${d.kelas}</td>
+    <td>${d.fi}</td>
+    <td>${d.xi.toFixed(1)}</td>
+    <td>${d.fixi.toFixed(1)}</td>
+    <td>${d.xiMinusMean.toFixed(2)}</td>
+    <td>${d.xiMinusMeanSq.toFixed(2)}</td>
+    <td>${d.xiMinusMeanSqFi.toFixed(2)}</td>
+  </tr>`;
+        });
+
+        // Baris total di tabel
+        tableHTML += `<tr class="total-row">
+  <td>Total</td>
+  <td>${totalFi}</td>
+  <td>-</td>
+  <td>${totalFiFixi.toFixed(1)}</td>
+  <td>-</td>
+  <td>-</td>
+  <td>${totalXiMinusMeanSqFi.toFixed(2)}</td>
+</tr>`;
+
+        tableHTML += `</tbody></table>`;
+
+        let stepsHTML = `<h3>Langkah-Langkah Perhitungan</h3>`;
+
+        stepsHTML += `<b>1. Range</b>
+<div class="formula">\\[
+Range = X_{max} - X_{min} = ${data[data.length - 1].atas} - ${
+          data[0].bawah
+        } = ${range}
+\\]</div>`;
+
+        stepsHTML += `<b>2. Kuartil</b>
+<div class="formula">\\[
+Q_i = T_b + \\left( \\frac{\\frac{i \\times N}{4} - F_k}{f_{Q_i}} \\right) \\times p
+\\]</div>`;
+
+        for (let i = 1; i <= 3; i++) {
+          stepsHTML += `<b>Kuartil ${i} (Q_${i}):</b>
+<div class="formula">\\[
+Q_{${i}} = T_b + \\left( \\frac{\\frac{${i} \\times N}{4} - F_k}{f_{Q_${i}}} \\right) \\times p = ${
+            Lq[i]
+          } + \\left( \\frac{${((i * N) / 4).toFixed(2)} - ${Fq[i]}}{${
+            fq[i]
+          }} \\right) \\times 10 = ${Qval[i].toFixed(2)}
+\\]</div>`;
+        }
+
+        stepsHTML += `<b>3. Standar Deviasi</b>
+<div class="formula">\\[
+SD = \\sqrt{ \\frac{ \\sum f_i (x_i - \\bar{x})^2 }{ n - 1 } } = \\sqrt{ \\frac{${sumXiMinusMeanSqFi.toFixed(
+          2
+        )}}{${totalFi} - 1} } = ${SD.toFixed(2)}
+\\]</div>`;
+
+        document.getElementById("outputStat").innerHTML = tableHTML;
+        document.getElementById("stepsStat").innerHTML = stepsHTML;
+
+        if (window.MathJax) {
+          MathJax.typesetPromise();
         }
       });
     </script>
