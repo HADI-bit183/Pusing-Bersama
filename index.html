@@ -47,15 +47,14 @@
       }
       main {
         flex-grow: 1;
-        padding: 2rem 2.5rem;
+        padding: 1.5rem 1.5rem;
+        width: 95%;
         max-width: 900px;
-        margin: 0 auto;
+        margin: 1rem auto 2rem auto;
         box-sizing: border-box;
         background: white;
         border-radius: 12px;
         box-shadow: 0 8px 24px rgb(0 0 0 / 0.1);
-        margin-top: 1rem;
-        margin-bottom: 2rem;
         min-height: 70vh;
         color: #475569;
       }
@@ -74,10 +73,14 @@
       }
       .members-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 2rem;
+        grid-template-columns: repeat(2, 160px);
+        grid-template-rows: repeat(2, auto);
+        gap: 3rem 2.5rem; /* jarak vertikal 3rem, horizontal 2.5rem */
+        justify-content: center;
+        justify-items: center;
       }
       .member-card {
+        width: 160px;
         background: #f1f5f9;
         padding: 1rem;
         border-radius: 10px;
@@ -110,7 +113,7 @@
       /* Kalkulator SPL */
       #equationsInput {
         width: 100%;
-        height: 140px;
+        height: 120px;
         font-family: "Fira Mono", monospace;
         font-size: 1rem;
         padding: 0.75rem 1rem;
@@ -203,6 +206,53 @@
         font-weight: 700;
         background-color: #e2e8f0;
       }
+
+      /* Responsif untuk layar kecil */
+      @media (max-width: 600px) {
+        main {
+          width: 95%;
+          max-width: 100%;
+          padding: 1rem 1rem;
+          margin-top: 0.5rem;
+        }
+        #equationsInput {
+          height: 120px;
+          font-size: 0.9rem;
+        }
+        button#solveBtn {
+          width: 100%;
+          font-size: 1rem;
+          padding: 0.7rem 0;
+        }
+        .members-grid {
+          grid-template-columns: repeat(2, 140px);
+          grid-template-rows: repeat(2, auto);
+          gap: 3rem 2rem; /* sedikit dikurangi horizontal agar pas di kecil */
+          justify-content: center;
+          justify-items: center;
+        }
+        .member-card {
+          width: 140px;
+        }
+        .member-photo {
+          width: 80px;
+          height: 80px;
+        }
+        nav {
+          flex-wrap: wrap;
+        }
+        nav button {
+          margin-left: 0.5rem;
+          margin-top: 0.5rem;
+          font-size: 1rem;
+          padding: 0.3rem 0.6rem;
+        }
+        #pageStatistika table,
+        #pageStatistika input[type="number"],
+        #pageStatistika input[type="text"] {
+          font-size: 12px;
+        }
+      }
     </style>
 
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
@@ -218,7 +268,7 @@
       <nav>
         <button id="navHome" class="active" aria-current="page">Home</button>
         <button id="navExplain">Penjelasan</button>
-        <button id="navCalculator">Kalkulator</button>
+        <button id="navCalculator">Aljabar</button>
         <button id="navStatistika">Statistika</button>
       </nav>
     </header>
@@ -226,7 +276,7 @@
     <main>
       <!-- Home -->
       <section id="pageHome">
-        <h1 class="group-name">Kelompok Matematika A1</h1>
+        <h1 class="group-name">Kelompok Pusing Bersama</h1>
         <div class="members-grid">
           <div class="member-card">
             <img src="Hadi.jpg" alt="Foto Hadi Priono" class="member-photo" />
@@ -257,53 +307,40 @@
 
       <!-- Penjelasan -->
       <section id="pageExplain" style="display: none">
-        <h1>Selamat Datang di Kalkulator SPL Eliminasi Gauss</h1>
+        <h1>
+          Selamat Datang di Kalkulator Sistem Persamaan Linear dan Statistika
+        </h1>
         <p>
-          Kalkulator ini membantu Anda menyelesaikan sistem persamaan linear
-          (SPL) menggunakan metode Eliminasi Gauss secara langkah demi langkah.
-          Anda dapat memasukkan persamaan linear dengan variabel bebas (misalnya
-          x, y, z), dan kalkulator akan menampilkan proses eliminasi untuk
-          mendapatkan solusi secara tepat.
+          Kalkulator ini dirancang untuk membantu Anda menyelesaikan dua jenis
+          perhitungan penting dalam matematika terapan, yaitu penyelesaian
+          sistem persamaan linear (SPL) dan perhitungan ukuran pemusatan data
+          dalam statistika, keduanya dengan penjelasan langkah demi langkah yang
+          mudah dipahami.
         </p>
         <p>
-          Metode Eliminasi Gauss adalah cara sistematis untuk menyelesaikan
-          sistem persamaan linear dengan mengubahnya menjadi bentuk matriks
-          segitiga atas (upper triangular matrix). Metode ini sangat penting
-          dalam aljabar linear dan berbagai aplikasi matematika terapan serta
-          rekayasa.
+          <strong>Metode Eliminasi Gauss</strong> merupakan teknik sistematis
+          dalam aljabar linear yang digunakan untuk menyelesaikan sistem
+          persamaan linear dengan mengubah bentuk matriks menjadi matriks
+          segitiga atas (upper triangular matrix). Proses ini melibatkan
+          pemilihan elemen pivot, pertukaran baris jika diperlukan, normalisasi
+          baris pivot, eliminasi elemen di bawah pivot, dan akhirnya substitusi
+          balik untuk menentukan nilai variabel. Metode ini sangat berguna dalam
+          berbagai bidang teknik, ilmu komputer, dan matematika terapan.
         </p>
         <p>
-          Berikut adalah langkah-langkah utama dalam metode Eliminasi Gauss:
-        </p>
-        <ol>
-          <li>
-            Pilih elemen pivot di setiap kolom (biasanya diagonal utama) yang
-            tidak nol.
-          </li>
-          <li>
-            Jika elemen pivot bernilai nol, lakukan pertukaran baris untuk
-            mendapatkan pivot bukan nol.
-          </li>
-          <li>
-            Bagi baris pivot sehingga elemen pivot menjadi 1 (normalisasi
-            pivot).
-          </li>
-          <li>
-            Eliminasi elemen-elemen di bawah pivot dengan mengurangkan kelipatan
-            baris pivot dari baris lain sehingga membentuk matriks segitiga
-            atas.
-          </li>
-          <li>
-            Setelah matriks berbentuk segitiga atas, lakukan substitusi balik
-            untuk mencari nilai variabel secara bertahap.
-          </li>
-        </ol>
-        <p>
-          Kalkulator ini menampilkan proses eliminasi secara lengkap dan langkah
-          demi langkah, termasuk matriks awal, operasi baris yang dilakukan,
-          serta hasil akhir solusi. Dengan demikian, pengguna dapat memahami
-          bagaimana solusi sistem persamaan linear diperoleh secara transparan
+          Pada bagian <strong>Statistika</strong>, kalkulator ini membantu
+          menghitung ukuran pemusatan data seperti rata-rata (mean), median,
+          modus, kuartil, serta standar deviasi dengan data berkelompok.
+          Ukuran-ukuran tersebut sangat penting untuk menganalisis distribusi
+          data dan memahami karakteristik utama dari suatu kumpulan data.
+          Kalkulator juga menampilkan langkah-langkah perhitungan secara detail
+          sehingga memudahkan pemahaman konsep statistik dasar secara praktis
           dan akurat.
+        </p>
+        <p>
+          Dengan kedua fitur ini, Anda dapat dengan mudah mengerjakan
+          perhitungan sistem persamaan linear dan analisis data statistik secara
+          cepat, tepat, dan transparan.
         </p>
       </section>
 
@@ -342,10 +379,6 @@ x + y + 2z = 9
       <!-- Statistika -->
       <section id="pageStatistika" style="display: none">
         <h2>Kalkulator Ukuran Pemusatan Data - Kuartil Konsisten</h2>
-        <p>
-          Kuartil 1, 2, dan 3 dihitung dengan rumus yang sama, hanya beda nilai
-          i.
-        </p>
 
         <table id="input-table">
           <thead>
